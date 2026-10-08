@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sellora — Your AI Marketing & Sales Team</title>
+<meta name="description" content="Sellora takes your product or idea, builds your store and Instagram, markets it, and sells it for you with an AI sales team — from idea to your first customer." />
+<meta name="theme-color" content="#0a0a0a" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Reset & base */
+*{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{background:#ffffff;color:#111111;font-family:'Onest',sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}ul{list-style:none}img{display:block}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+:focus-visible{outline:2px solid #b15f2c;outline-offset:2px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+:root{
+  --background:#ffffff; --foreground:#111111; --ink:#0a0a0a; --muted:#8d8d8d; --subtle:#b6b6b6; --line:#e6e5e2; --surface:#f1f0ee; --surface-2:#e3e2df; --accent:#b15f2c; --accent-from:#cf8047; --accent-to:#97501f; --hero-from:#ecebe9; --hero-to:#c9c9c9;
+  --shell:88rem;
+}
+
+/* Adaptive grid (media queries) */
+@media (max-width:1920px){ html{ font-size:0.833333vw } }
+@media (max-width:1440px){ html{ font-size:1.111111vw } }
+@media (max-width:1024px){ html{ font-size:1.5625vw } }
+@media (max-width:640px){ html{ font-size:4.444444vw } }
+
+/* Utility */
+.shell{max-width:var(--shell);margin-inline:auto;padding-inline:1.25rem}
+@media(min-width:640px){.shell{padding-inline:2rem}}
+.container-row{display:flex;align-items:center}
+
+/* Tokens */
+.pill{display:inline-flex;align-items:center;gap:.75rem;border-radius:9999px;font-size:.875rem;font-weight:500;padding:.875rem 1.75rem}
+.pill .badge{width:2.25rem;height:2.25rem;border-radius:50%;display:inline-grid;place-items:center}
+.pill.dark{background:var(--ink);color:#fff}
+.pill.dark .badge{background:#fff;color:var(--ink)}
+.pill.light{background:var(--surface);color:var(--foreground)}
+.pill.outline{border:1px solid var(--line);background:transparent;color:var(--foreground);padding:.875rem 1.25rem}
+
+/* Spring hover disable on touch */
+@media (hover:none){.spring-hover{transform:none!important}}
+
+/* Skip link */
+a.skip{position:absolute;left:1rem;top:1rem;z-index:60;border-radius:.875rem;background:var(--ink);padding:.5rem 1rem;font-size:.875rem;color:#fff;display:none}
+a.skip:focus{display:block}
+
+/* Loader */
+#loader{position:fixed;inset:0;z-index:120;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.25rem;background:var(--ink);color:#fff;border-radius:0 0 2rem 2rem}
+#loader .brand{display:flex;align-items:center;gap:.5rem;font-weight:600;font-size:1.5rem}
+#loader .brand svg{width:1.875rem;height:1.875rem;color:#cf8047}
+#loader .tag{max-width:24ch;font-size:.875rem;color:rgba(255,255,255,.55);text-align:center}
+#loader .progressWrap{width:min(22rem,72vw);display:flex;flex-direction:column;gap:.75rem}
+#loader .track{height:.5rem;background:rgba(255,255,255,.12);border-radius:9999px;overflow:hidden}
+#loader .fill{height:100%;background:#cf8047;width:0;transition:width .1s ease-out}
+#loader .meta{display:flex;justify-content:space-between;font-size:.75rem;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,.45)}
+#loader .meta .num{color:rgba(255,255,255,.8);font-variant-numeric:tabular-nums}
+
+/* Header */
+.header{position:absolute;inset-inline:0;top:0;z-index:50}
+.headerInner{display:flex;align-items:center;justify-content:space-between;gap:1.5rem;padding:1.25rem}
+.brandBtn{display:inline-flex;align-items:center;gap:.5rem;font-size:1.125rem;font-weight:600;letter-spacing:-.01em;cursor:pointer}
+.brandBtn svg{width:1.25rem;height:1.25rem;color:var(--accent)}
+.nav{display:flex;gap:2rem;font-size:.875rem;font-weight:500}
+.nav button{opacity:.85}
+.clockChip{display:inline-flex;align-items:center;gap:.75rem;border:1px solid rgba(230,229,226,.8);background:rgba(255,255,255,.4);backdrop-filter:blur(4px);border-radius:.875rem;padding:.5rem .75rem;font-size:.75rem;color:rgba(17,17,17,.7)}
+.menuBtn{display:inline-flex;align-items:center;gap:.5rem;border:1px solid rgba(230,229,226,.8);background:rgba(255,255,255,.4);backdrop-filter:blur(4px);border-radius:.875rem;padding:.5rem .75rem;font-size:.75rem;font-weight:500;text-transform:uppercase}
+
+/* Hero */
+section#home{position:relative;isolation:isolate;overflow:hidden;border-radius:0 0 2rem 2rem;background:var(--hero-to)}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.hero-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-vignette{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(255,255,255,.35),transparent,rgba(255,255,255,.35))}
+.watermark{pointer-events:none;position:absolute;inset-inline:0;bottom:7rem;z-index:1;text-align:center;user-select:none;font-weight:700;line-height:1;font-size:13rem;color:rgba(255,255,255,.4);opacity:0;transform:translateY(20px)}
+
+.heroContent{position:relative;z-index:20;padding:7rem 1.25rem 5rem;display:flex;flex-direction:column;gap:2rem}
+@media(min-width:1024px){.heroContent{display:grid;min-height:100lvh;grid-template-columns:repeat(12,1fr);gap:2.5rem;padding:9rem 2rem 7rem}}
+.leftCol{grid-column:span 7;display:flex;flex-direction:column;gap:1.75rem}
+.rightCol{grid-column:span 5;display:flex;flex-direction:column;align-items:flex-start;gap:2rem}
+.eyebrow{display:inline-flex;gap:.5rem;font-size:.875rem;font-weight:500;color:rgba(17,17,17,.7);align-items:center}
+.eyebrow .dot{width:.375rem;height:.375rem;border-radius:50%;background:rgba(17,17,17,.5)}
+h1.heroTitle{max-width:18ch;font-size:2.25rem;font-weight:600;line-height:.98;letter-spacing:-.02em;display:block}
+@media(min-width:640px){h1.heroTitle{font-size:3rem}}
+@media(min-width:768px){h1.heroTitle{font-size:3.75rem}}
+.ratingRow{display:flex;gap:.75rem;align-items:center;font-size:.875rem;font-weight:500;color:rgba(17,17,17,.7)}
+.ratingRow svg{width:1rem;height:1rem;color:var(--accent)}
+.ctaRow{display:flex;flex-wrap:wrap;gap:.75rem}
+
+/* Card */
+.heroCard{width:100%;max-width:24rem;border-radius:1.25rem;background:rgba(255,255,255,.7);padding:.5rem;box-shadow:0 1px 2px rgba(0,0,0,.05),0 0 0 1px rgba(230,229,226,.7);backdrop-filter:blur(12px)}
+.cardInner{display:flex;gap:.5rem;cursor:pointer;border-radius:.875rem;padding:.5rem}
+.cardTile{aspect-ratio:1;width:6rem;display:grid;place-items:center;border-radius:.875rem;background:var(--ink);color:#cf8047;font-size:1.875rem}
+.cardRight{flex:1;border-radius:.875rem;background:rgba(241,240,238,.7);padding:.75rem;display:flex;flex-direction:column;justify-content:space-between}
+.cardCaption{font-size:.65rem;font-weight:500;text-transform:uppercase;letter-spacing:.05em;color:rgba(17,17,17,.45)}
+.cardTitle{max-width:8rem;font-size:.875rem;font-weight:500;line-height:1.35}
+.carouselDots{display:flex;gap:.5rem;align-items:center}
+.dash{height:.25rem;border-radius:9999px;background:rgba(17,17,17,.2);width:.375rem;transition:all .3s}
+.dash.active{width:1rem;background:rgba(17,17,17,.7)}
+.carouselControls{display:flex;gap:.5rem;align-items:center}
+.ctrl{width:1.75rem;height:1.75rem;border-radius:50%;background:#fff;color:rgba(17,17,17,.7);display:grid;place-items:center;box-shadow:0 0 0 1px #e6e5e2}
+.ctrl:hover{background:#111;color:#fff}
+
+/* Works with */
+.worksWith{width:100%;max-width:24rem}
+.worksGrid{display:grid;grid-template-columns:repeat(4,1fr);column-gap:1rem;row-gap:.75rem}
+.worksItem{display:inline-flex;gap:.375rem;font-size:.75rem;color:rgba(17,17,17,.7);align-items:center}
+.worksItem svg{width:.875rem;height:.875rem;color:rgba(17,17,17,.4)}
+
+/* Status bar */
+.statusBar{border-top:1px solid rgba(17,17,17,.1);padding:1.25rem;display:flex;justify-content:space-between;gap:.75rem;font-size:.75rem;font-weight:500;text-transform:uppercase;color:rgba(17,17,17,.6)}
+
+/* About */
+#about{padding:5rem 1.25rem}
+.aboutGrid{display:grid;gap:3rem;align-items:center}
+@media(min-width:1024px){.aboutGrid{grid-template-columns:1fr 1fr;padding-block:7rem}}
+.globeBig{position:absolute;left:-1rem;top:50%;transform:translateY(-50%);font-size:12rem;color:rgba(17,17,17,.08)}
+.aboutH2{font-size:1.5rem;font-weight:500;line-height:1.35}
+@media(min-width:640px){.aboutH2{font-size:1.875rem}}
+
+/* Create band */
+.createBand{display:flex;flex-direction:column;gap:.75rem;padding:2.5rem 1.25rem}
+@media(min-width:640px){.createBand{flex-direction:row;gap:1rem}}
+.createBand li{flex:1;display:grid;place-items:center;height:6rem;border-radius:9999px;font-size:1.875rem;font-weight:500}
+@media(min-width:640px){.createBand li{height:10rem;font-size:2.25rem}}
+.createBand .idea{background:var(--surface);color:var(--foreground)}
+.createBand .sell{background:linear-gradient(to bottom right,var(--accent-from),var(--accent-to));color:#fff}
+.createBand .arrow{background:var(--ink);color:#fff}
+.createBand .grow{background:rgba(241,240,238,.6);color:rgba(17,17,17,.35)}
+
+/* AI Team */
+#team{padding:2.5rem 1.25rem 5rem}
+.teamEyebrow{display:inline-flex;align-items:center;gap:.5rem;border:1px solid var(--line);border-radius:9999px;padding:.375rem 1rem}
+.teamTitle{font-size:2.25rem;font-weight:600;text-align:center;margin-block:1.25rem 3rem}
+.teamGrid{display:grid;gap:1.5rem}
+@media(min-width:768px){.teamGrid{grid-template-columns:repeat(2,1fr);gap:2rem}}
+.teamCard{position:relative;min-height:22rem;overflow:hidden;border-radius:2rem;background:var(--ink);padding:1.5rem;color:#fff;cursor:pointer}
+.teamCard .meta{display:flex;justify-content:space-between;font-size:.75rem;text-transform:uppercase;letter-spacing:.025em;color:rgba(255,255,255,.45)}
+.teamCard .logoMark{font-size:4.5rem;color:rgba(255,255,255,.9);display:block;margin:1.25rem auto}
+.teamCard h3{font-size:1.5rem;font-weight:500}
+.teamCard p{margin-top:.5rem;color:rgba(255,255,255,.55);max-width:28rem;font-size:.875rem}
+.tag{display:inline-flex;border-radius:9999px;padding:.5rem 1rem;font-size:.875rem;border:1px solid rgba(255,255,255,.25);margin-right:.5rem}
+
+/* How it works */
+#how{padding:5rem 1.25rem}
+.howRow{display:flex;align-items:center;gap:1rem;border-radius:1.25rem;padding-block:1.5rem;padding-inline:1.5rem;transition:all .35s}
+.howRow:hover{background:rgba(241,240,238,1);padding-left:2rem;padding-right:1.25rem}
+.howIndex{width:1.75rem;font-size:.875rem;font-weight:500;color:rgba(17,17,17,.4)}
+.howTitle{flex:1;font-size:1.5rem;font-weight:500}
+.howDesc{max-width:20rem;font-size:.875rem;color:rgba(17,17,17,.55)}
+.howBadge{width:2.5rem;height:2.5rem;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center}
+
+/* Stats */
+#results{padding:0 1.25rem 5rem}
+.statsPanel{border-radius:2rem;background:var(--ink);padding:3rem 1.5rem;color:#fff}
+.statsGrid{margin-top:3.5rem;display:grid;grid-template-columns:repeat(2,1fr);column-gap:2rem;row-gap:3rem}
+@media(min-width:1024px){.statsGrid{grid-template-columns:repeat(4,1fr)}}
+.statVal{font-size:3rem;font-weight:600}
+@media(min-width:640px){.statVal{font-size:3.75rem}}
+@media(min-width:768px){.statVal{font-size:4.5rem}}
+.statLabel{margin-top:.75rem;font-size:.875rem;color:rgba(255,255,255,.55)}
+
+/* Footer */
+footer{position:relative;overflow:hidden;border-radius:2rem 2rem 0 0;background:var(--ink);color:#fff}
+.footerInner{position:relative;z-index:10;padding:5rem 1.25rem 2.5rem}
+.footerCTA{display:flex;flex-direction:column;gap:2rem;border-bottom:1px solid rgba(255,255,255,.1);padding-bottom:4rem}
+.footerCols{display:grid;gap:3rem;padding-block:4rem}
+@media(min-width:768px){.footerCols{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1024px){.footerCols{grid-template-columns:repeat(4,1fr)}}
+.colTitle{font-size:.75rem;text-transform:uppercase;letter-spacing:.025em;color:rgba(255,255,255,.4)}
+.animatedLink{display:inline-flex;gap:.5rem;transition:transform .32s cubic-bezier(.19,.9,.26,1),opacity .32s}
+.animatedLink:hover{transform:translateX(4px);opacity:1}
+.legal{border-top:1px solid rgba(255,255,255,.1);padding-top:2rem;display:flex;flex-direction:column;align-items:center;gap:1rem;color:rgba(255,255,255,.45)}
+.legalRow{display:flex;gap:1rem}
+.footerWatermark{position:absolute;inset-inline:0;bottom:-1.5rem;z-index:0;text-align:center;pointer-events:none;font-weight:700;line-height:1;font-size:13rem;color:rgba(255,255,255,.05)}
+
+/* NavMenu */
+#navMenu{position:fixed;inset:0;z-index:115;display:none;flex-direction:column;background:var(--ink);color:#fff}
+#navMenu.open{display:flex}
+#navMenu .top{padding:1.25rem;display:flex;justify-content:space-between;align-items:center}
+#navMenu .navList{flex:1;display:flex;flex-direction:column;justify-content:center;gap:.5rem;padding:0 2rem}
+#navMenu .navList button{display:block;width:100%;text-align:left;padding-block:.5rem;font-size:2.25rem;font-weight:600}
+#navMenu .bottom{border-top:1px solid rgba(255,255,255,.1);padding:1.5rem}
+
+/* Modal */
+#modalBackdrop{position:fixed;inset:0;z-index:110;display:none;align-items:flex-end;justify-content:center;padding:1rem;background:rgba(17,17,17,.3);backdrop-filter:blur(16px)}
+@media(min-width:640px){#modalBackdrop{align-items:center}}
+#modalBackdrop.open{display:flex}
+.modalPanel{width:100%;max-width:32rem;border-radius:2rem;background:#fff;padding:1.5rem;box-shadow:0 25px 50px -12px rgba(0,0,0,.25),0 0 0 1px #e6e5e2}
+.modalClose{position:absolute;right:.75rem;top:.75rem;width:2.25rem;height:2.25rem;border-radius:50%;background:var(--surface);display:grid;place-items:center}
+.modalHeading{display:flex;align-items:center;gap:.375rem;margin-bottom:1rem}
+.formControls{display:flex;flex-direction:column;gap:1rem}
+.formRow{display:flex;gap:1rem;align-items:center}
+.formNote{font-size:.75rem;color:rgba(17,17,17,.45)}
+.btnSubmit{display:inline-flex;align-items:center;gap:.5rem;border-radius:9999px;padding:.75rem 1.25rem;background:var(--ink);color:#fff}
+.success{display:flex;flex-direction:column;align-items:center;gap:1rem;padding-block:2rem}
+.success .logo{width:3.5rem;height:3.5rem;border-radius:50%;background:var(--ink);color:#cf8047;display:grid;place-items:center}
+
+/* simple transitions for reveals */
+.revealWrap{overflow:hidden;display:inline-block}
+.revealInner{transform:translateY(100%);opacity:0;display:inline-block}
+.revealed .revealInner{transform:translateY(0);opacity:1;transition:transform .9s cubic-bezier(.215,.61,.355,1),opacity .9s}
+.word{display:inline-block;transform:translateY(24px);opacity:0}
+.word.revealed{transform:translateY(0);opacity:1;transition:transform .7s cubic-bezier(.165,.84,.44,1),opacity .7s}
+
+</style>
+</head>
+<body>
+<a href="#main" class="skip">Skip to content</a>
+<!-- PageLoader -->
+<div id="loader" aria-hidden="false">
+  <div class="brand"><svg viewBox="0 0 48 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z"/></svg>Sellora</div>
+  <div class="tag">From idea to your first customer.</div>
+  <div class="progressWrap">
+    <div class="track"><div class="fill"></div></div>
+    <div class="meta"><div>Loading</div><div class="num" id="loaderNum">000</div></div>
+  </div>
+</div>
+
+<header class="header" aria-hidden="true">
+  <div class="shell headerInner">
+    <div class="brandBtn spring-hover" id="brandBtn" role="button" tabindex="0">
+      <svg viewBox="0 0 48 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg"><path d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z"/></svg>
+      <span>Sellora</span>
+    </div>
+    <nav class="nav" id="topNav">
+      <button data-target="home" aria-current="page">Home</button>
+      <button data-target="how">How it works</button>
+      <button data-target="team">AI Team ▾</button>
+      <button data-target="about">Why Sellora</button>
+      <button data-target="results">Results</button>
+      <button id="contactBtn">Contact</button>
+    </nav>
+    <div style="display:flex;gap:.75rem;align-items:center">
+      <div class="clockChip" id="clockChip" aria-hidden="true"><div style="font-size:.75rem;color:rgba(17,17,17,.45)">Local time</div><div id="clockTime" style="min-width:3.5rem;font-weight:500">9:41am</div><div style="color:rgba(17,17,17,.3)">•</div><div id="clockDate" style="font-weight:500">8 October, 2026</div></div>
+      <div id="menuBtn" class="menuBtn spring-hover"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path d="M4 6h16M4 12h16M4 18h16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="menuLabel">Menu</span></div>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <!-- Hero -->
+  <section id="home">
+    <div class="hero-bg" aria-hidden="true">
+      <img src="https://api.getlayers.ai/storage/v1/object/public/public/assets/lumora-e8b711fc68/hero/after.jpg" alt="base" id="heroBase">
+      <canvas id="revealCanvas" aria-hidden="true"></canvas>
+    </div>
+    <div class="hero-vignette"></div>
+    <div class="watermark" id="heroWM">SELLORA</div>
+    <div class="shell heroContent">
+      <div class="leftCol">
+        <div class="eyebrow" id="heroEyebrow"><span class="dot"></span>AI marketing & sales team</div>
+        <h1 class="heroTitle" id="heroTitle"><span class="revealWrap"><span class="revealInner">Your product.</span></span><br><span class="revealWrap"><span class="revealInner">Our AI team.</span></span><br><span class="revealWrap"><span class="revealInner">Your first customer.</span></span></h1>
+        <div class="ratingRow" id="ratingRow"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.9l-5.8 3.05 1.1-6.46-4.69-4.58 6.49-.94L12 2.5z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.9l-5.8 3.05 1.1-6.46-4.69-4.58 6.49-.94L12 2.5z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.9l-5.8 3.05 1.1-6.46-4.69-4.58 6.49-.94L12 2.5z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.9l-5.8 3.05 1.1-6.46-4.69-4.58 6.49-.94L12 2.5z"/></svg><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.5l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46L12 17.9l-5.8 3.05 1.1-6.46-4.69-4.58 6.49-.94L12 2.5z"/></svg><div>Idea to first sale in 7 days</div></div>
+        <div class="ctaRow">
+          <button class="pill dark spring-hover" id="startFree"><span>Start free</span><span class="badge"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path d="M5 12h14M13 6l6 6-6 6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button>
+          <button class="pill outline spring-hover" id="seeHow"><span>See how it works</span></button>
+        </div>
+      </div>
+      <div class="rightCol">
+        <div class="heroCard" id="heroCard">
+          <div class="cardInner" id="cardInner">
+            <div class="cardTile"><svg viewBox="0 0 48 48" fill="currentColor"><path d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z"/></svg></div>
+            <div class="cardRight">
+              <div>
+                <div class="cardCaption" id="cardCaption">Shape it</div>
+                <div class="cardTitle" id="cardTitle">Your idea, sharpened.</div>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div class="carouselDots">
+                  <div class="dash active"></div><div class="dash"></div><div class="dash"></div>
+                </div>
+                <div class="carouselControls">
+                  <button class="ctrl" id="prevBtn" aria-label="Previous">‹</button>
+                  <button class="ctrl" id="nextBtn" aria-label="Next">›</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="worksWith">
+          <div style="margin-bottom:.75rem;font-size:.75rem;font-weight:500;color:rgba(17,17,17,.45)" id="worksLabel">Works with</div>
+          <div class="worksGrid">
+            <div class="worksItem"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke-width="1.6"/></svg>Shopify</div>
+            <div class="worksItem"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke-width="1.6"/></svg>Instagram</div>
+            <div class="worksItem"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke-width="1.6"/></svg>Google</div>
+            <div class="worksItem"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke-width="1.6"/></svg>Meta</div>
+            <div class="worksItem"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke-width="1.6"/></svg>TikTok</div>
+            <div class="worksItem"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke-width="1.6"/></svg>Etsy</div>
+            <div class="worksItem"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke-width="1.6"/></svg>Stripe</div>
+            <div class="worksItem"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="9" stroke-width="1.6"/></svg>Shop</div>
+          </div>
+        </div>
+      </div>
+      <div style="grid-column:1/-1;margin-top:2rem" class="statusBar"><div>Built for first-time sellers</div><div class="hide-sm">Instagram + Shopify + AI</div><div>Scroll to explore ↓</div></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="shell aboutGrid">
+      <div style="position:relative;min-height:14rem">
+        <div class="globeBig">🌐</div>
+        <div class="eyebrow">Why Sellora</div>
+        <div style="position:absolute;left:1rem;bottom:1rem;max-width:14rem;display:flex;gap:.75rem;align-items:center;color:rgba(17,17,17,.7)"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg" width="24" height="24"><circle cx="12" cy="12" r="9.25" stroke-width="1.4"/></svg><span>Most new online stores never make a single sale. We're here to change that.</span></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:2.5rem">
+        <div class="aboutH2" id="aboutH2"><span class="wordWrap">Store builders stop when your shop goes live. <span style="color:#8d8d8d">Sellora keeps going — shaping your product, marketing it, and selling it until your first customer pays.</span></span></div>
+        <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1.5rem;border-top:1px solid var(--line);padding-top:1.5rem"><div style="color:rgba(17,17,17,.45);font-size:.875rem">Follow the build<div style="display:flex;gap:.5rem;margin-top:.5rem"><button class="spring-hover" style="width:2.25rem;height:2.25rem;border-radius:50%;background:var(--accent);color:#fff;display:grid;place-items:center">X</button><button class="spring-hover" style="width:2.25rem;height:2.25rem;border-radius:50%;background:var(--surface);display:grid;place-items:center">◯</button><button class="spring-hover" style="width:2.25rem;height:2.25rem;border-radius:50%;background:var(--surface);display:grid;place-items:center">♪</button></div></div><button class="pill outline" id="howBtn">How it works</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CreateBand -->
+  <ul class="createBand shell" aria-hidden="false">
+    <li class="idea revealItem">Idea</li>
+    <li class="sell revealItem">Sell</li>
+    <li class="arrow revealItem">→</li>
+    <li class="grow revealItem">Grow</li>
+  </ul>
+
+  <!-- AI Team -->
+  <section id="team">
+    <div class="shell">
+      <div class="teamEyebrow">Your AI team</div>
+      <h2 class="teamTitle">Meet the team that sells for you</h2>
+      <div class="teamGrid">
+        <article class="teamCard" data-index="0">
+          <div class="meta"><div>Strategy — Stage 1</div><div class="badge small">↗</div></div>
+          <div class="logoMark">◦</div>
+          <h3>Idea Shaper</h3>
+          <p>Turns your product or idea into an offer people want, with the right price, customer and profit per sale.</p>
+          <div style="position:absolute;inset-inline:1.5rem;bottom:1.5rem;display:flex"><div class="tag">Pricing</div><div class="tag">Positioning</div><div class="tag">Suppliers</div></div>
+        </article>
+        <article class="teamCard" data-index="1">
+          <div class="meta"><div>Design — Stage 2</div><div class="badge small">↗</div></div>
+          <div class="logoMark">◦</div>
+          <h3>Store Builder</h3>
+          <p>Designs your brand and builds your Shopify store and Instagram, ready to sell in days.</p>
+          <div style="position:absolute;inset-inline:1.5rem;bottom:1.5rem;display:flex"><div class="tag">Branding</div><div class="tag">Shopify</div><div class="tag">Instagram</div></div>
+        </article>
+        <article class="teamCard" data-index="2">
+          <div class="meta"><div>Marketing — Stage 3</div><div class="badge small">↗</div></div>
+          <div class="logoMark">◦</div>
+          <h3>Growth Marketer</h3>
+          <p>Creates posts, reels and ads, follows what each platform rewards, and gets you found on Google and AI search.</p>
+          <div style="position:absolute;inset-inline:1.5rem;bottom:1.5rem;display:flex"><div class="tag">Content</div><div class="tag">Ads</div><div class="tag">SEO</div></div>
+        </article>
+        <article class="teamCard" data-index="3">
+          <div class="meta"><div>Sales — Stage 4</div><div class="badge small">↗</div></div>
+          <div class="logoMark">◦</div>
+          <h3>Sales Closer</h3>
+          <p>Replies to every DM and comment, sends payment links, follows up, and saves every customer to your CRM.</p>
+          <div style="position:absolute;inset-inline:1.5rem;bottom:1.5rem;display:flex"><div class="tag">DMs</div><div class="tag">Follow-ups</div><div class="tag">CRM</div></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section id="how">
+    <div class="shell">
+      <div class="eyebrow">How it works</div>
+      <h2 style="margin:1.25rem 0 3rem;max-width:16ch;font-size:2.25rem;font-weight:600">From idea to first sale</h2>
+      <ul>
+        <li class="revealItem" style="border-top:1px solid var(--line)"><div class="howRow"><div class="howIndex">01</div><div class="howTitle">Shape it</div><p class="howDesc">Tell us your product or idea. We sharpen the price, customer and profit.</p><div class="howBadge">↗</div></div></li>
+        <li class="revealItem" style="border-top:1px solid var(--line)"><div class="howRow"><div class="howIndex">02</div><div class="howTitle">Build it</div><p class="howDesc">Your brand, Shopify store and Instagram, designed and set up for you.</p><div class="howBadge">↗</div></div></li>
+        <li class="revealItem" style="border-top:1px solid var(--line)"><div class="howRow"><div class="howIndex">03</div><div class="howTitle">Get found</div><p class="howDesc">Posts, ads, Google, AI search and marketplaces put you in front of buyers.</p><div class="howBadge">↗</div></div></li>
+        <li class="revealItem" style="border-top:1px solid var(--line)"><div class="howRow"><div class="howIndex">04</div><div class="howTitle">Sell it</div><p class="howDesc">Your AI sales team turns conversations into orders and brings buyers back.</p><div class="howBadge">↗</div></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section id="results">
+    <div class="shell">
+      <div class="statsPanel" id="statsPanel">
+        <div style="color:rgba(255,255,255,.65);text-transform:uppercase;font-size:.875rem;font-weight:500">Built for results</div>
+        <div style="margin-top:1rem;max-width:20ch;font-size:1.875rem;font-weight:500">Built for your first sale, and every one after.</div>
+        <ul class="statsGrid" id="statsGrid">
+          <li class="revealItem"><div class="statVal" data-target="7">0</div><div class="statLabel">From idea to launch (days)</div></li>
+          <li class="revealItem"><div class="statVal" data-target="9">0</div><div class="statLabel">AI team members</div></li>
+          <li class="revealItem"><div class="statVal" data-target="24">0</div><div class="statLabel">Replies to every DM</div></li>
+          <li class="revealItem"><div class="statVal" data-target="30">0</div><div class="statLabel">First-sale promise (days)</div></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footerInner shell">
+    <div class="footerCTA">
+      <div style="display:flex;flex-direction:column;gap:.75rem"><div style="max-width:16ch;font-size:2.25rem;font-weight:600">Got a product in mind? Let's get your first customer.</div></div>
+      <div><button class="pill light" id="earlyAccess">Get early access <span class="badge"><svg viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path d="M7 17 17 7M8 7h9v9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></button></div>
+    </div>
+    <div class="footerCols">
+      <div>
+        <div style="display:flex;align-items:center;gap:.5rem;font-size:1.125rem;font-weight:600"><svg viewBox="0 0 48 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:1.25rem;height:1.25rem;color:#cf8047"><path d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z"/></svg>Sellora</div>
+        <div style="max-width:20rem;margin-top:1rem;color:rgba(255,255,255,.55)">Your AI marketing and sales team, from idea to your first customer.</div>
+      </div>
+      <div>
+        <div class="colTitle">Product</div>
+        <div style="margin-top:1rem;display:flex;flex-direction:column;gap:.5rem"><a class="animatedLink" href="#how">How it works</a><a class="animatedLink" href="#team">AI Team</a><a class="animatedLink" href="#results">Results</a><button class="animatedLink" id="footerContact">Contact</button></div>
+      </div>
+      <div>
+        <div class="colTitle">Features</div>
+        <div style="margin-top:1rem;display:flex;flex-direction:column;gap:.5rem"><div>Store builder</div><div>Instagram selling</div><div>AI sales team</div><div>CRM</div></div>
+      </div>
+      <div>
+        <div class="colTitle">Social</div>
+        <div style="margin-top:1rem;display:flex;flex-direction:column;gap:.5rem"><div>Instagram</div><div>TikTok</div><div>X</div><div>LinkedIn</div></div>
+      </div>
+    </div>
+    <div class="legal"><div>© 2026 Sellora. All rights reserved.</div><div class="legalRow"><a class="animatedLink">Privacy</a><a class="animatedLink">Terms</a></div></div>
+    <div class="footerWatermark">SELLORA</div>
+  </div>
+</footer>
+
+<!-- NavMenu -->
+<div id="navMenu" aria-hidden="true">
+  <div class="top shell"><div style="display:flex;align-items:center;gap:.5rem"><svg viewBox="0 0 48 48" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="width:1.25rem;height:1.25rem;color:#cf8047"><path d="M24 2c2.2 13.8 7.9 19.6 22 22-14.1 2.4-19.8 8.2-22 22-2.2-13.8-7.9-19.6-22-22 14.1-2.4 19.8-8.2 22-22Z"/></svg>Sellora</div><button id="navClose" class="modalClose">✕</button></div>
+  <div class="navList shell">
+    <button data-target="home"><span style="font-size:1rem;color:rgba(255,255,255,.3);margin-right:1rem">01</span><span style="color:rgba(255,255,255,.7)">Home</span></button>
+    <button data-target="how"><span style="font-size:1rem;color:rgba(255,255,255,.3);margin-right:1rem">02</span><span style="color:rgba(255,255,255,.7)">How it works</span></button>
+    <button data-target="team"><span style="font-size:1rem;color:rgba(255,255,255,.3);margin-right:1rem">03</span><span style="color:rgba(255,255,255,.7)">AI Team</span></button>
+    <button data-target="about"><span style="font-size:1rem;color:rgba(255,255,255,.3);margin-right:1rem">04</span><span style="color:rgba(255,255,255,.7)">Why Sellora</span></button>
+    <button data-target="results"><span style="font-size:1rem;color:rgba(255,255,255,.3);margin-right:1rem">05</span><span style="color:rgba(255,255,255,.7)">Results</span></button>
+    <button id="navContact"><span style="font-size:1rem;color:rgba(255,255,255,.3);margin-right:1rem">06</span><span style="color:rgba(255,255,255,.7)">Contact</span></button>
+  </div>
+  <div class="bottom shell"><div id="menuTime" style="color:rgba(255,255,255,.45)">Local time — 9:41am</div><div style="margin-top:.5rem"><button id="menuEarly" class="pill outline">Get early access →</button></div></div>
+</div>
+
+<!-- Waitlist Modal -->
+<div id="modalBackdrop" role="dialog" aria-modal="true">
+  <div class="modalPanel" role="document">
+    <button id="modalClose" class="modalClose">✕</button>
+    <div class="modalHeading"><div style="width:.375rem;height:.375rem;border-radius:50%;background:var(--accent)"></div><div style="font-size:.875rem;font-weight:500;color:rgba(17,17,17,.6)">Get early access</div></div>
+    <h2 style="font-size:1.5rem;margin-bottom:1rem">Tell us what you want to sell.</h2>
+    <form id="waitlistForm" class="formControls">
+      <label><div style="font-size:.75rem;font-weight:500;text-transform:uppercase;color:rgba(17,17,17,.5);margin-bottom:.25rem">Your name</div><input name="name" required placeholder="Your name" style="width:100%;border:1px solid var(--line);background:rgba(241,240,238,.5);border-radius:.875rem;padding:.75rem 1rem;font-size:.875rem" /></label>
+      <label><div style="font-size:.75rem;font-weight:500;text-transform:uppercase;color:rgba(17,17,17,.5);margin-bottom:.25rem">Email</div><input type="email" name="email" required placeholder="you@example.com" style="width:100%;border:1px solid var(--line);background:rgba(241,240,238,.5);border-radius:.875rem;padding:.75rem 1rem;font-size:.875rem" /></label>
+      <label><div style="font-size:.75rem;font-weight:500;text-transform:uppercase;color:rgba(17,17,17,.5);margin-bottom:.25rem">Product</div><textarea name="product" rows="4" required placeholder="What are you selling, or planning to sell? A product, an idea, or a link to your shop." style="width:100%;border:1px solid var(--line);background:rgba(241,240,238,.5);border-radius:.875rem;padding:.75rem 1rem;font-size:.875rem;resize:none"></textarea></label>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:1rem"><div class="formNote">We reply within one business day.</div><button class="btnSubmit" type="submit">Join the waitlist <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path d="M7 17 17 7M8 7h9v9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    </form>
+    <div id="successState" class="success" style="display:none"><div class="logo">◦</div><h3>You're on the list</h3><div style="max-width:32ch;font-size:.875rem;color:rgba(17,17,17,.6)">Thanks for signing up. We'll be in touch soon to help you get your first customer.</div><button id="successClose" class="btnSubmit">Close</button></div>
+  </div>
+</div>
+
+<script type="importmap">
+{ "imports": { "lenis": "https://unpkg.com/lenis@1.3.23/dist/lenis.mjs" } }
+</script>
+<script type="module">
+import Lenis from 'lenis';
+// Core state
+let ready=false;
+// Lenis setup
+window.scrollTo(0,0);
+const lenis = new Lenis({ smoothWheel:true });
+function raf(t){ lenis.raf(t); requestAnimationFrame(raf); }
+requestAnimationFrame(raf);
+
+function stopScroll(){ lenis.stop(); document.documentElement.style.position='relative'; document.documentElement.style.overflow='hidden'; document.documentElement.style.height='100%'; }
+function startScroll(){ lenis.start(); document.documentElement.style.removeProperty('position'); document.documentElement.style.removeProperty('overflow'); document.documentElement.style.removeProperty('height'); }
+
+function scrollToId(id){ setTimeout(()=>{ const el=document.getElementById(id); if(!el) return; const top = el.getBoundingClientRect().top + window.pageYOffset; window.scrollTo({top,behavior:'smooth'}); },50); }
+
+// Adaptive grid scaling >1920
+function applyAdaptiveGrid(){ const FONT_BASE=16, baseWidth=1920, coef=0.6666; const w=window.innerWidth; const widthReduction = ((baseWidth - w)/baseWidth)*100; const size = FONT_BASE - (FONT_BASE * (widthReduction * coef))/100; if(size>FONT_BASE) document.documentElement.style.fontSize = size + 'px'; else document.documentElement.style.removeProperty('font-size'); }
+applyAdaptiveGrid(); addEventListener('resize', applyAdaptiveGrid);
+
+// Loader counter
+const loader = document.getElementById('loader'); const fill = loader.querySelector('.fill'); const num = document.getElementById('loaderNum'); stopScroll();
+function easeInOutCubic(t){ return t<0.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2 }
+function runLoader(){ const duration=1300; const start=performance.now(); function tick(now){ const t = Math.min(1,(now-start)/duration); const v = Math.round(easeInOutCubic(t)*100); fill.style.width = v + '%'; num.textContent = String(v).padStart(3,'0'); if(t<1) requestAnimationFrame(tick); else exitLoader(); }
+ requestAnimationFrame(tick);
+}
+function exitLoader(){ // animate up and fade
+ const wm = document.getElementById('heroWM'); loader.style.transition='transform .7s cubic-bezier(.22,1,.36,1),opacity .4s'; loader.style.transform='translateY(-100%)'; loader.style.opacity='0'; setTimeout(()=>{ loader.remove(); ready=true; startScroll(); // fire initial reveals
+ document.querySelectorAll('.revealItem, .revealWrap, .word').forEach(el=>el.classList.remove('revealed')); runRevealsAfterReady(); },750); }
+runLoader();
+
+// Simple reveal flow
+function runRevealsAfterReady(){ // header
+ const header = document.querySelector('.header'); header.style.opacity=0; header.style.transform='translateY(-14px)'; header.style.transition='transform .7s cubic-bezier(.22,1,.36,1) .15s,opacity .5s .15s'; header.style.opacity=1; header.style.transform='translateY(0)'; header.setAttribute('aria-hidden','false');
+ // watermark
+ const wm=document.getElementById('heroWM'); setTimeout(()=>{ wm.style.transition='transform .7s cubic-bezier(.22,1,.36,1),opacity .7s'; wm.style.opacity='.4'; wm.style.transform='translateY(0)'; },300);
+ // hero lines
+ const lines = document.querySelectorAll('.revealWrap'); lines.forEach((w,i)=>{ setTimeout(()=>{ w.classList.add('revealed'); },250 + i*120); });
+ // other timed reveals
+ setTimeout(()=>document.getElementById('heroCard').style.transform='translateY(0)',400);
+}
+
+// Text word reveal for About
+function wordReveal(){ const container = document.querySelector('#about .wordWrap'); if(!container) return; const words = container.textContent.split(' '); container.innerHTML = ''; words.forEach((w,i)=>{ const sp = document.createElement('span'); sp.className='word'; sp.textContent = w + (i<words.length-1?' ':''); container.appendChild(sp); setTimeout(()=>sp.classList.add('revealed'), 300 + i*35); }); }
+wordReveal();
+
+// Intersection-based reveals for other items
+const io = new IntersectionObserver((entries)=>{ entries.forEach(e=>{ if(e.isIntersecting){ const el=e.target; const idx = Array.from(document.querySelectorAll('.revealItem')).indexOf(el); if(el.classList.contains('revealItem')){ setTimeout(()=>el.classList.add('revealed'), (idx> -1? idx*90 : 0)); }
+ // stats count-up trigger
+ if(el.id==='statsPanel' || el.closest('#results')){ startStats(); }
+ io.unobserve(el);
+ } }); },{threshold:0.18});
+document.querySelectorAll('.revealItem').forEach(el=>io.observe(el));
+
+// Simple spring helper for hover scale
+function springize(el, opts={tension:320,friction:18,scale:1.04}){
+  let x=1,v=0,target=1; const {tension,friction,scale} = opts; el.addEventListener('pointerenter', ()=>target=scale); el.addEventListener('pointerleave', ()=>target=1);
+  function step(){ const accel = tension*(target - x) - friction*v; v += accel*(1/60); x += v*(1/60); el.style.transform = `scale(${x})`; if(Math.abs(target-x)>0.001 || Math.abs(v)>0.001) requestAnimationFrame(step); }
+  el.addEventListener('pointerenter', ()=>requestAnimationFrame(step)); el.addEventListener('pointerleave', ()=>requestAnimationFrame(step)); }
+
+document.querySelectorAll('.spring-hover').forEach(el=>springize(el,{tension:320,friction:18,scale:1.04}));
+
+// Clock
+function updateClock(){ const d=new Date(); const hours = d.getHours()%12 || 12; const mins = String(d.getMinutes()).padStart(2,'0'); const am = d.getHours()>=12? 'pm':'am'; document.getElementById('clockTime').textContent = `${hours}:${mins}${am}`; document.getElementById('clockDate').textContent = d.toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'}); document.getElementById('menuTime').textContent = 'Local time — ' + `${hours}:${mins}${am}`; }
+updateClock(); setInterval(updateClock,1000);
+
+// Hero liquid reveal canvas
+(function(){ if(window.matchMedia('(prefers-reduced-motion: reduce)').matches) return; const baseImg = document.getElementById('heroBase'); const revealSrc = 'https://api.getlayers.ai/storage/v1/object/public/public/assets/lumora-e8b711fc68/hero/before.jpg'; const canvas = document.getElementById('revealCanvas'); const ctx = canvas.getContext('2d'); let cover=null, brush=null; const dpr = Math.min(window.devicePixelRatio || 1, 2); const brushRadius = 143; const decay = 0.016; let radius = Math.ceil(brushRadius * dpr); let brushDiam = radius*2; let points=[]; let last=null; let idle=0; let drawing=false; let offCover=null;
+ function makeBrush(){ brush = document.createElement('canvas'); brush.width = brushDiam; brush.height = brushDiam; const bctx = brush.getContext('2d'); const g = bctx.createRadialGradient(radius,radius,0,radius,radius,radius); g.addColorStop(0,'rgba(255,255,255,1)'); g.addColorStop(0.55,'rgba(255,255,255,.82)'); g.addColorStop(1,'rgba(255,255,255,0)'); bctx.clearRect(0,0,brushDiam,brushDiam); bctx.fillStyle = g; bctx.fillRect(0,0,brushDiam,brushDiam); }
+ function makeCover(img){ offCover = document.createElement('canvas'); offCover.width = canvas.width; offCover.height = canvas.height; const c = offCover.getContext('2d'); // draw image cover using object-fit:cover
+ const iw = img.naturalWidth, ih = img.naturalHeight; const cr = canvas.width/canvas.height; const ir = iw/ih; let sx=0,sy=0,sw=iw,sh=ih; if(ir>cr){ // image too wide
+  const nw = ih*cr; sx = (iw - nw)/2; sw = nw; } else { const nh = iw/cr; sy = (ih - nh)/2; sh = nh; }
+ c.drawImage(img,sx,sy,sw,sh,0,0,canvas.width,canvas.height);
+ }
+ function resize(){ const rect = canvas.getBoundingClientRect(); canvas.width = Math.ceil(rect.width * dpr); canvas.height = Math.ceil(rect.height * dpr); canvas.style.width = rect.width + 'px'; canvas.style.height = rect.height + 'px'; radius = Math.ceil(brushRadius * dpr); brushDiam = radius*2; makeBrush(); if(!coverImage.complete) return; makeCover(coverImage); }
+ const revealImage = new Image(); revealImage.crossOrigin='anonymous'; revealImage.src = revealSrc; const coverImage = revealImage; revealImage.onload = ()=>{ cover = true; resize(); }
+ const ro = new ResizeObserver(resize); ro.observe(canvas);
+ window.addEventListener('pointermove',(e)=>{ const rect=canvas.getBoundingClientRect(); const x = (e.clientX - rect.left) * dpr; const y = (e.clientY - rect.top) * dpr; if(x< -radius || y < -radius || x>canvas.width+radius || y>canvas.height+radius) { last=null; return; } drawing = true; const step = Math.max(radius*0.3,1); if(last){ const dx = x-last.x, dy=y-last.y; const dist = Math.hypot(dx,dy); const n = Math.min(Math.ceil(dist/step),60); for(let i=0;i<n;i++){ const t = (i+1)/n; points.push({x:last.x + dx*t, y:last.y + dy*t}); } } else { points.push({x,y}); }
+ last={x,y}; });
+ function stamp(x,y){ if(!offCover) return; const c = Math.ceil(brushDiam/2); const bctx = brush.getContext('2d'); // brush already has gradient; create a temp to draw cover portion
+ const tmp = document.createElement('canvas'); tmp.width = brushDiam; tmp.height = brushDiam; const tctx = tmp.getContext('2d'); tctx.clearRect(0,0,brushDiam,brushDiam); tctx.globalCompositeOperation='source-over'; tctx.drawImage(offCover, x-c, y-c, brushDiam, brushDiam, 0,0,brushDiam,brushDiam); // mask with brush
+ tctx.globalCompositeOperation = 'destination-in'; tctx.drawImage(brush,0,0);
+ ctx.globalCompositeOperation='source-over'; ctx.drawImage(tmp,x-c,y-c);
+ }
+ function tick(){ if(points.length){ idle=0; const p = points.shift(); stamp(p.x,p.y); } else { idle++; const fade = Math.min(decay + idle*0.004,0.5); ctx.globalCompositeOperation='destination-out'; ctx.fillStyle = `rgba(0,0,0,${fade})`; ctx.fillRect(0,0,canvas.width,canvas.height); ctx.globalCompositeOperation='source-over'; if(idle>120){ ctx.clearRect(0,0,canvas.width,canvas.height); last=null; } }
+ requestAnimationFrame(tick); }
+ requestAnimationFrame(tick);
+})();
+
+// Carousel behaviour
+const slides = [{caption:'Shape it',title:'Your idea, sharpened.'},{caption:'Build it',title:'Store and Instagram, done.'},{caption:'Sell it',title:'DMs turned into orders.'}]; let sIndex=0; const cardCaption = document.getElementById('cardCaption'); const cardTitle = document.getElementById('cardTitle'); const dashes = document.querySelectorAll('.dash'); function showSlide(i,dir=1){ const prev = sIndex; sIndex = (i+slides.length)%slides.length; // animate
+ const out = document.getElementById('cardInner'); out.style.transition='transform .5s cubic-bezier(.16,1,.3,1),opacity .4s'; out.style.transform=`translateY(${14*dir}px)`; out.style.opacity='0'; setTimeout(()=>{ cardCaption.textContent=slides[sIndex].caption; cardTitle.textContent=slides[sIndex].title; dashes.forEach((d,idx)=>d.classList.toggle('active', idx===sIndex)); out.style.transform='translateY(0)'; out.style.opacity='1'; },300);
+}
+document.getElementById('nextBtn').addEventListener('click',()=>showSlide(sIndex+1,1));
+document.getElementById('prevBtn').addEventListener('click',()=>showSlide(sIndex-1,-1));
+// clicking card advances
+document.getElementById('cardInner').addEventListener('click',()=>showSlide(sIndex+1,1));
+
+// Nav interactions
+document.querySelectorAll('[data-target]').forEach(btn=>{ btn.addEventListener('click', (e)=>{ const t = btn.getAttribute('data-target'); if(t==='') return; // contact handled separately
+ if(t==='') return; if(t==='home' || t==='how' || t==='team' || t==='about' || t==='results'){ document.getElementById('navMenu').classList.remove('open'); startScroll(); scrollToId(t); } }); });
+
+// Contact/open modal attachments
+const openModal = ()=>{ document.getElementById('modalBackdrop').classList.add('open'); stopScroll(); };
+document.getElementById('contactBtn').addEventListener('click', openModal);
+document.getElementById('startFree').addEventListener('click', openModal);
+document.getElementById('earlyAccess').addEventListener('click', openModal);
+document.getElementById('footerContact').addEventListener('click', openModal);
+document.getElementById('menuEarly').addEventListener('click', ()=>{ document.getElementById('navMenu').classList.remove('open'); openModal(); startScroll(); });
+
+// Modal close
+document.getElementById('modalClose').addEventListener('click', ()=>{ document.getElementById('modalBackdrop').classList.remove('open'); startScroll(); });
+document.getElementById('successClose').addEventListener('click', ()=>{ document.getElementById('successState').style.display='none'; document.getElementById('waitlistForm').style.display='flex'; document.getElementById('modalBackdrop').classList.remove('open'); startScroll(); setTimeout(()=>{ document.getElementById('waitlistForm').reset?.(); },300); });
+
+// Form submit stub
+const form = document.getElementById('waitlistForm'); form.addEventListener('submit',(e)=>{ e.preventDefault(); const btn = form.querySelector('.btnSubmit'); const prevText = btn.textContent; btn.textContent='Sending…'; setTimeout(()=>{ form.style.display='none'; document.getElementById('successState').style.display='flex'; btn.textContent=prevText; },800); });
+
+// Nav menu open/close
+document.getElementById('menuBtn').addEventListener('click', ()=>{ document.getElementById('navMenu').classList.add('open'); stopScroll(); });
+document.getElementById('navClose').addEventListener('click', ()=>{ document.getElementById('navMenu').classList.remove('open'); startScroll(); });
+// close on escape
+addEventListener('keydown',(e)=>{ if(e.key==='Escape'){ document.getElementById('navMenu').classList.remove('open'); document.getElementById('modalBackdrop').classList.remove('open'); startScroll(); }});
+
+// Stats count-up
+let statsStarted=false; function startStats(){ if(statsStarted) return; statsStarted=true; const stats = document.querySelectorAll('.statVal'); stats.forEach((el,idx)=>{ const target = Number(el.getAttribute('data-target')||0); const observer = new IntersectionObserver((entries)=>{ entries.forEach(en=>{ if(en.isIntersecting){ let start=performance.now(); function step(now){ const rect = el.getBoundingClientRect(); const vpH = window.innerHeight; const top = rect.top; const prog = 1 - Math.max(0, Math.min(1, (top - vpH)/(vpH))); const duration=800; const t = Math.min(1,(now-start)/duration); const val = Math.round(t*target); el.textContent = val; if(t<1) requestAnimationFrame(step); } requestAnimationFrame(step); observer.disconnect(); } }); }); observer.observe(el); }); }
+
+// Observe stats panel to trigger
+const sp = document.getElementById('statsPanel'); if(sp) io.observe(sp);
+
+// Card clicks open modal
+document.querySelectorAll('.teamCard').forEach(c=>c.addEventListener('click', openModal));
+
+// Skip link focus handled by browser
+
+// small helper to expose scrollTo globally
+window.scrollToId = scrollToId;
+
+</script>
+</body>
+</html>
